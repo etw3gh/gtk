@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+    echo "Please supply the full path to the program you wish to make executable globally as the first argument."
+    exit 2
+fi
+
+chmod +x $1
+
+#test if symlink exists
+
+#replace symlinks in order to ensure newest
+symlink=/usr/local/bin/$1
+pathto=`readlink -f $1`
+if ! [ -L "$symlink" ]
+then
+	sudo ln -s $pathto $symlink
+	echo "symlink ADDED: $symlink"
+else
+	sudo rm $symlink
+	sudo ln -s $pathto $symlink
+	echo "symlink REPLACED: $symlink"
+fi
