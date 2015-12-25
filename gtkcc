@@ -1,0 +1,31 @@
+#!/bin/bash
+
+if [ "$#" -eq 2 ]
+then
+  if [ ${2: -2}  == ".c" ]
+  then 
+    compiled=$1
+    source=$2
+  else
+    echo "Source file must have a .c extension"
+    exit 2
+  fi
+elif [ "$#" -eq 1 ]
+then
+  if [ ${1: -2}  == ".c" ]
+  then
+    source=$1
+    compiled="${source%.*}"
+  else
+    echo "no valid source specified"
+    exit 2
+  fi
+else
+  echo "invalid number of args"
+  exit 2
+fi
+
+echo "Source: $source"
+echo "Compiled: $compiled"
+
+gcc `pkg-config --cflags gtk+-3.0` -o $compiled $source `pkg-config --libs gtk+-3.0`
